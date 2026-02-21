@@ -192,6 +192,13 @@ body {
 }
 
 @media (max-width: 768px) {
+  .about-btn {
+    position: static;
+    transform: none;
+    margin-top: 0.75rem;
+    display: inline-block;
+  }
+
   .modal-body {
     flex-direction: column;
     align-items: center;
