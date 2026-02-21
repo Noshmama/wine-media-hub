@@ -360,7 +360,6 @@ body {
   background: var(--white);
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
-  overflow: hidden;
   transition: box-shadow var(--transition);
   padding: 0.75rem;
 }
@@ -370,20 +369,18 @@ body {
 }
 
 .podcast-top {
-  display: flex;
-  gap: 0.75rem;
+  display: block;
 }
 
 .podcast-card .artwork {
-  width: 80px;
+  width: 100%;
   height: auto;
   border-radius: 6px;
-  flex-shrink: 0;
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
 .podcast-info {
-  flex: 1;
-  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
@@ -520,6 +517,24 @@ body {
     height: 90px;
     object-fit: cover;
     margin-bottom: 0;
+  }
+
+  .podcast-top {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .podcast-card .artwork {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  .podcast-info {
+    flex: 1;
+    min-width: 0;
   }
 }
 
