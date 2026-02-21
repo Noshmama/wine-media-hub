@@ -125,9 +125,7 @@ async function fetchAllVideos() {
             channel: item.snippet.channelTitle,
             thumbnail: item.snippet.thumbnails.medium?.url || item.snippet.thumbnails.default?.url,
             publishedAt: item.snippet.publishedAt,
-            description: item.snippet.description,
-            categories: [category],
-            url: `https://www.youtube.com/watch?v=${videoId}`
+            categories: [category]
           });
         }
 

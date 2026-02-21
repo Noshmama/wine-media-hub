@@ -78,8 +78,7 @@ async function fetchRSSEpisodes(feedUrl) {
       title: item.title || 'Untitled Episode',
       pubDate: item.pubDate || item.isoDate || null,
       duration: item.itunes?.duration || null,
-      audioUrl: item.enclosure?.url || null,
-      description: item.contentSnippet || item.content || ''
+      audioUrl: item.enclosure?.url || null
     }));
     return episodes;
   } catch (err) {
@@ -116,13 +115,11 @@ async function fetchAllPodcasts() {
           }
 
           allPodcasts.set(podcastId, {
-            podcastId,
             name: result.collectionName || result.trackName || 'Unknown Podcast',
             author: result.artistName || 'Unknown',
             artwork: result.artworkUrl600 || result.artworkUrl100 || result.artworkUrl60 || '',
             description: result.description || '',
             feedUrl: result.feedUrl || '',
-            iTunesUrl: result.collectionViewUrl || '',
             categories: [category],
             episodes: [] // populated later
           });
@@ -169,10 +166,13 @@ async function main() {
   // Sort by name
   podcasts.sort((a, b) => a.name.localeCompare(b.name));
 
+  // Strip fields only needed during fetch (feedUrl), not displayed on the site
+  const cleanPodcasts = podcasts.map(({ feedUrl, ...rest }) => rest);
+
   const output = {
     lastUpdated: new Date().toISOString(),
-    totalPodcasts: podcasts.length,
-    podcasts
+    totalPodcasts: cleanPodcasts.length,
+    podcasts: cleanPodcasts
   };
 
   const outPath = path.join(__dirname, '..', 'data', 'podcasts.json');
