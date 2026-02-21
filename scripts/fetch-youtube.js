@@ -73,6 +73,12 @@ const CATEGORIES = {
     'English sparkling wine',
     'Chinese wine',
     'Croatian wine'
+  ],
+  'Wineries': [
+    'winery tour',
+    'winery visit',
+    'best wineries',
+    'winery behind the scenes'
   ]
 };
 

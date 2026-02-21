@@ -50,6 +50,11 @@ const CATEGORIES = {
   'Emerging Wine Regions': [
     'new wine regions',
     'emerging wine'
+  ],
+  'Wineries': [
+    'winery podcast',
+    'winery tour',
+    'winery stories'
   ]
 };
 
