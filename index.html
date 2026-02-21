@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wine Media Hub</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1>Wine Media Hub</h1>
+    <p class="tagline">Curated wine videos &amp; podcasts — updated weekly</p>
+    <button class="about-btn" id="about-btn">About The Creator Of This Site</button>
+  </header>
+
+  <!-- About Me Modal -->
+  <div class="modal-overlay" id="about-modal">
+    <div class="modal">
+      <button class="modal-close" id="modal-close">&times;</button>
+      <div class="modal-body">
+        <img class="modal-photo" src="images/profile.jpg" alt="Zillah Bahar">
+        <div class="modal-text">
+          <h2>Zillah Bahar</h2>
+          <p class="modal-subtitle">Wine &amp; Spirits Professional | AI Implementation Specialist</p>
+          <p>With over two decades of experience in the wine and spirits trade, I have built a career at the intersection of industry expertise and innovation. From vineyard to glass, I understand the business of wine — the markets, the people, and the trends that shape this dynamic industry.</p>
+          <p>Wine Media Hub is my curated collection of the best wine content on the web, bringing together videos and podcasts across every facet of the wine world — from business and trade to tasting, winemaking, and emerging regions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="split-screen">
+    <!-- Left Panel: YouTube Videos -->
+    <section class="panel panel-youtube" id="youtube-panel">
+      <div class="panel-header">
+        <h2>YouTube Videos</h2>
+        <div class="filter-bar">
+          <label for="youtube-category">Category:</label>
+          <select id="youtube-category" class="category-select">
+            <option value="All">All</option>
+            <option value="Business & Trade">Business &amp; Trade</option>
+            <option value="Connoisseur & Tasting">Connoisseur &amp; Tasting</option>
+            <option value="Wines by Region">Wines by Region</option>
+            <option value="Grape Varieties">Grape Varieties</option>
+            <option value="Winemaking & Viticulture">Winemaking &amp; Viticulture</option>
+            <option value="Wine Collecting & Investment">Wine Collecting &amp; Investment</option>
+            <option value="Wine & Food">Wine &amp; Food</option>
+            <option value="Wine Education">Wine Education</option>
+            <option value="Sustainability & Climate">Sustainability &amp; Climate</option>
+            <option value="Emerging Wine Regions">Emerging Wine Regions</option>
+          </select>
+        </div>
+      </div>
+      <div class="card-grid" id="youtube-grid">
+        <div class="loading">Loading videos&hellip;</div>
+      </div>
+    </section>
+
+    <!-- Right Panel: Podcasts -->
+    <section class="panel panel-podcasts" id="podcast-panel">
+      <div class="panel-header">
+        <h2>Podcasts</h2>
+        <div class="filter-bar">
+          <label for="podcast-category">Category:</label>
+          <select id="podcast-category" class="category-select">
+            <option value="All">All</option>
+            <option value="Business & Trade">Business &amp; Trade</option>
+            <option value="Connoisseur & Tasting">Connoisseur &amp; Tasting</option>
+            <option value="Wines by Region">Wines by Region</option>
+            <option value="Grape Varieties">Grape Varieties</option>
+            <option value="Winemaking & Viticulture">Winemaking &amp; Viticulture</option>
+            <option value="Wine Collecting & Investment">Wine Collecting &amp; Investment</option>
+            <option value="Wine & Food">Wine &amp; Food</option>
+            <option value="Wine Education">Wine Education</option>
+            <option value="Sustainability & Climate">Sustainability &amp; Climate</option>
+            <option value="Emerging Wine Regions">Emerging Wine Regions</option>
+          </select>
+        </div>
+      </div>
+      <div class="card-grid" id="podcast-grid">
+        <div class="loading">Loading podcasts&hellip;</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Data sourced from YouTube and iTunes. Updated weekly via GitHub Actions.</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/youtube-panel.js"></script>
+  <script src="js/podcast-panel.js"></script>
+</body>
+</html>
