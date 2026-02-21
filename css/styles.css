@@ -513,27 +513,6 @@ body {
 
 /* ===== Responsive: Stack panels vertically below 1024px ===== */
 @media (max-width: 1024px) {
-  .split-screen {
-    grid-template-columns: 1fr;
-  }
-
-  .panel {
-    border-right: none;
-    border-bottom: 1px solid var(--gray-200);
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-
-  .video-card {
-    flex-direction: column;
-  }
-
-  .video-card .thumbnail {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-  }
-
   .site-header h1 {
     font-size: 1.4rem;
   }
@@ -543,5 +522,37 @@ body {
     transform: none;
     margin-top: 0.75rem;
     display: inline-block;
+  }
+
+  .split-screen {
+    grid-template-columns: 1fr;
+    flex: none;
+  }
+
+  .panel {
+    border-right: none;
+    border-bottom: 2px solid var(--burgundy);
+    overflow: visible;
+  }
+
+  .card-grid {
+    overflow-y: visible;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .video-card {
+    flex-direction: column;
+  }
+
+  .video-card a {
+    flex-shrink: unset;
+  }
+
+  .video-card .thumbnail {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    object-fit: cover;
   }
 }
