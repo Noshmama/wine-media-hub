@@ -529,8 +529,9 @@ body {
     border-bottom: 1px solid var(--gray-200);
   }
 
-  .card-grid {
-    max-height: none;
+  .panel {
+    max-height: 80vh;
+    overflow-y: auto;
   }
 
   .video-card {
