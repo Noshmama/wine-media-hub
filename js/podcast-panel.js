@@ -1,5 +1,6 @@
 /**
  * Wine Media Hub — Podcast Panel
+ * Renders all cards once, then filters by toggling CSS visibility.
  */
 
 const PodcastPanel = {
@@ -11,7 +12,7 @@ const PodcastPanel = {
     this.grid = document.getElementById('podcast-grid');
     this.categorySelect = document.getElementById('podcast-category');
 
-    this.categorySelect.addEventListener('change', () => this.render());
+    this.categorySelect.addEventListener('change', () => this.filterCards());
 
     const data = await App.fetchData('data/podcasts.json');
     if (!data || !data.podcasts) {
@@ -20,84 +21,57 @@ const PodcastPanel = {
     }
 
     this.podcasts = data.podcasts;
-    this.render();
+    this.buildCards();
   },
 
-  render() {
-    const category = this.categorySelect.value;
-    const filtered = category === 'All'
-      ? this.podcasts
-      : this.podcasts.filter(p => p.categories.includes(category));
-
-    if (filtered.length === 0) {
-      this.grid.innerHTML = '<div class="loading">No podcasts found for this category.</div>';
+  /** Build all cards once and attach event listeners */
+  buildCards() {
+    if (this.podcasts.length === 0) {
+      this.grid.innerHTML = '<div class="loading">No podcasts found.</div>';
       return;
     }
 
-    this.grid.innerHTML = filtered.map((podcast, idx) => this.renderCard(podcast, idx)).join('');
+    const fragment = document.createDocumentFragment();
 
-    // Attach toggle listeners for episode lists
-    this.grid.querySelectorAll('.episodes-toggle').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const list = btn.nextElementSibling;
-        const isOpen = list.classList.toggle('open');
-        btn.textContent = isOpen
-          ? 'Hide episodes'
-          : `Show ${list.children.length} recent episodes`;
-      });
-    });
+    this.podcasts.forEach(podcast => {
+      const card = document.createElement('div');
+      card.className = 'podcast-card';
+      card.dataset.categories = podcast.categories.join('|');
 
-    // Clicking podcast name or artwork also toggles episodes
-    this.grid.querySelectorAll('.podcast-card').forEach(card => {
-      const toggle = card.querySelector('.episodes-toggle');
-      if (!toggle) return;
+      const name = App.escapeHtml(podcast.name);
+      const author = App.escapeHtml(podcast.author);
+      const artwork = App.escapeHtml(podcast.artwork || '');
+      const description = App.escapeHtml(podcast.description || '');
 
-      card.querySelectorAll('.artwork, .podcast-name-link').forEach(el => {
-        el.style.cursor = 'pointer';
-        el.addEventListener('click', (e) => {
-          e.preventDefault();
-          toggle.click();
-        });
-      });
-    });
-  },
+      const badges = podcast.categories
+        .map(c => `<span class="category-badge">${App.escapeHtml(c)}</span>`)
+        .join('');
 
-  renderCard(podcast, idx) {
-    const name = App.escapeHtml(podcast.name);
-    const author = App.escapeHtml(podcast.author);
-    const artwork = App.escapeHtml(podcast.artwork || '');
-    const description = App.escapeHtml(podcast.description || '');
+      const episodes = podcast.episodes || [];
+      let episodesHtml = '';
 
-    const badges = podcast.categories
-      .map(c => `<span class="category-badge">${App.escapeHtml(c)}</span>`)
-      .join('');
+      if (episodes.length > 0) {
+        const episodeItems = episodes.map(ep => {
+          const epTitle = App.escapeHtml(ep.title);
+          const epDate = App.formatDate(ep.pubDate);
+          const audioUrl = ep.audioUrl ? App.escapeHtml(ep.audioUrl) : '';
 
-    const episodes = (podcast.episodes || []);
-    let episodesHtml = '';
+          return `
+            <div class="episode-item">
+              <div class="episode-title">${epTitle}</div>
+              <div class="episode-date">${epDate}${ep.duration ? ' &middot; ' + App.escapeHtml(ep.duration) : ''}</div>
+              ${audioUrl ? `<audio controls preload="none" src="${audioUrl}"></audio>` : ''}
+            </div>
+          `;
+        }).join('');
 
-    if (episodes.length > 0) {
-      const episodeItems = episodes.map(ep => {
-        const epTitle = App.escapeHtml(ep.title);
-        const epDate = App.formatDate(ep.pubDate);
-        const audioUrl = ep.audioUrl ? App.escapeHtml(ep.audioUrl) : '';
-
-        return `
-          <div class="episode-item">
-            <div class="episode-title">${epTitle}</div>
-            <div class="episode-date">${epDate}${ep.duration ? ' &middot; ' + App.escapeHtml(ep.duration) : ''}</div>
-            ${audioUrl ? `<audio controls preload="none" src="${audioUrl}"></audio>` : ''}
-          </div>
+        episodesHtml = `
+          <button class="episodes-toggle">Show ${episodes.length} recent episodes</button>
+          <div class="episodes-list">${episodeItems}</div>
         `;
-      }).join('');
+      }
 
-      episodesHtml = `
-        <button class="episodes-toggle">Show ${episodes.length} recent episodes</button>
-        <div class="episodes-list">${episodeItems}</div>
-      `;
-    }
-
-    return `
-      <div class="podcast-card">
+      card.innerHTML = `
         <div class="podcast-top">
           <img class="artwork" src="${artwork}" alt="${name}" loading="lazy">
           <div class="podcast-info">
@@ -110,7 +84,63 @@ const PodcastPanel = {
           </div>
         </div>
         ${episodesHtml}
-      </div>
-    `;
+      `;
+
+      // Attach episode toggle listener
+      const toggle = card.querySelector('.episodes-toggle');
+      if (toggle) {
+        const list = card.querySelector('.episodes-list');
+
+        toggle.addEventListener('click', () => {
+          const isOpen = list.classList.toggle('open');
+          toggle.textContent = isOpen
+            ? 'Hide episodes'
+            : `Show ${list.children.length} recent episodes`;
+        });
+
+        // Clicking artwork or name also toggles episodes
+        card.querySelectorAll('.artwork, .podcast-name-link').forEach(el => {
+          el.style.cursor = 'pointer';
+          el.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggle.click();
+          });
+        });
+      }
+
+      fragment.appendChild(card);
+    });
+
+    this.grid.innerHTML = '';
+    this.grid.appendChild(fragment);
+  },
+
+  /** Show/hide cards based on selected category — no DOM rebuild */
+  filterCards() {
+    const category = this.categorySelect.value;
+    const cards = this.grid.children;
+
+    let visibleCount = 0;
+    for (let i = 0; i < cards.length; i++) {
+      const card = cards[i];
+      if (!card.dataset.categories) continue;
+      const show = category === 'All' || card.dataset.categories.split('|').includes(category);
+      card.style.display = show ? '' : 'none';
+      if (show) visibleCount++;
+    }
+
+    // Handle empty state
+    let emptyMsg = this.grid.querySelector('.empty-message');
+    if (visibleCount === 0) {
+      if (!emptyMsg) {
+        emptyMsg = document.createElement('div');
+        emptyMsg.className = 'loading empty-message';
+        emptyMsg.textContent = 'No podcasts found for this category.';
+        this.grid.appendChild(emptyMsg);
+      }
+      emptyMsg.style.display = '';
+    } else if (emptyMsg) {
+      emptyMsg.style.display = 'none';
+    }
   }
 };

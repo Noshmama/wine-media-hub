@@ -1,5 +1,6 @@
 /**
  * Wine Media Hub — YouTube Panel
+ * Renders all cards once, then filters by toggling CSS visibility.
  */
 
 const YouTubePanel = {
@@ -11,7 +12,7 @@ const YouTubePanel = {
     this.grid = document.getElementById('youtube-grid');
     this.categorySelect = document.getElementById('youtube-category');
 
-    this.categorySelect.addEventListener('change', () => this.render());
+    this.categorySelect.addEventListener('change', () => this.filterCards());
 
     // Video player modal
     const modal = document.getElementById('video-modal');
@@ -36,7 +37,7 @@ const YouTubePanel = {
     }
 
     this.videos = data.videos;
-    this.render();
+    this.buildCards();
   },
 
   openVideo(videoId) {
@@ -46,41 +47,31 @@ const YouTubePanel = {
     modal.classList.add('open');
   },
 
-  render() {
-    const category = this.categorySelect.value;
-    const filtered = category === 'All'
-      ? this.videos
-      : this.videos.filter(v => v.categories.includes(category));
-
-    if (filtered.length === 0) {
-      this.grid.innerHTML = '<div class="loading">No videos found for this category.</div>';
+  /** Build all cards once and attach event listeners */
+  buildCards() {
+    if (this.videos.length === 0) {
+      this.grid.innerHTML = '<div class="loading">No videos found.</div>';
       return;
     }
 
-    this.grid.innerHTML = filtered.map(video => this.renderCard(video)).join('');
+    const fragment = document.createDocumentFragment();
 
-    // Attach click handlers for inline play
-    this.grid.querySelectorAll('[data-video-id]').forEach(el => {
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        this.openVideo(el.dataset.videoId);
-      });
-    });
-  },
+    this.videos.forEach(video => {
+      const card = document.createElement('div');
+      card.className = 'video-card';
+      card.dataset.categories = video.categories.join('|');
 
-  renderCard(video) {
-    const title = App.escapeHtml(video.title);
-    const channel = App.escapeHtml(video.channel);
-    const date = App.formatDate(video.publishedAt);
-    const thumbnail = App.escapeHtml(video.thumbnail || '');
-    const videoId = App.escapeHtml(video.videoId);
+      const title = App.escapeHtml(video.title);
+      const channel = App.escapeHtml(video.channel);
+      const date = App.formatDate(video.publishedAt);
+      const thumbnail = App.escapeHtml(video.thumbnail || '');
+      const videoId = App.escapeHtml(video.videoId);
 
-    const badges = video.categories
-      .map(c => `<span class="category-badge">${App.escapeHtml(c)}</span>`)
-      .join('');
+      const badges = video.categories
+        .map(c => `<span class="category-badge">${App.escapeHtml(c)}</span>`)
+        .join('');
 
-    return `
-      <div class="video-card">
+      card.innerHTML = `
         <a href="#" data-video-id="${videoId}">
           <img class="thumbnail" src="${thumbnail}" alt="${title}" loading="lazy">
         </a>
@@ -92,7 +83,48 @@ const YouTubePanel = {
           <div class="video-date">${date}</div>
           <div class="category-badges">${badges}</div>
         </div>
-      </div>
-    `;
+      `;
+
+      card.querySelectorAll('[data-video-id]').forEach(el => {
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.openVideo(el.dataset.videoId);
+        });
+      });
+
+      fragment.appendChild(card);
+    });
+
+    this.grid.innerHTML = '';
+    this.grid.appendChild(fragment);
+  },
+
+  /** Show/hide cards based on selected category — no DOM rebuild */
+  filterCards() {
+    const category = this.categorySelect.value;
+    const cards = this.grid.children;
+
+    let visibleCount = 0;
+    for (let i = 0; i < cards.length; i++) {
+      const card = cards[i];
+      if (!card.dataset.categories) continue;
+      const show = category === 'All' || card.dataset.categories.split('|').includes(category);
+      card.style.display = show ? '' : 'none';
+      if (show) visibleCount++;
+    }
+
+    // Handle empty state
+    let emptyMsg = this.grid.querySelector('.empty-message');
+    if (visibleCount === 0) {
+      if (!emptyMsg) {
+        emptyMsg = document.createElement('div');
+        emptyMsg.className = 'loading empty-message';
+        emptyMsg.textContent = 'No videos found for this category.';
+        this.grid.appendChild(emptyMsg);
+      }
+      emptyMsg.style.display = '';
+    } else if (emptyMsg) {
+      emptyMsg.style.display = 'none';
+    }
   }
 };
