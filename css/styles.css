@@ -526,24 +526,28 @@ body {
   }
 
   .card-grid {
-    overflow-y: visible;
     max-height: 70vh;
     overflow-y: auto;
   }
 
   .video-card {
     flex-direction: column;
+    overflow: visible;
   }
 
   .video-card a {
     flex-shrink: unset;
     width: 100%;
+    display: block;
   }
 
   .video-card .thumbnail {
     width: 100%;
-    height: auto !important;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    aspect-ratio: auto;
+    object-fit: contain;
+    border-radius: 4px;
   }
 }
