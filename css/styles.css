@@ -44,7 +44,6 @@ body {
   color: var(--white);
   text-align: center;
   padding: 1.5rem 1rem;
-  position: relative;
 }
 
 .site-header h1 {
@@ -62,10 +61,8 @@ body {
 
 /* ===== About Link ===== */
 .about-btn {
-  position: absolute;
-  right: 1.5rem;
-  top: 50%;
-  transform: translateY(-50%);
+  display: inline-block;
+  margin-top: 0.75rem;
   padding: 0;
   background: none;
   border: none;
@@ -515,13 +512,6 @@ body {
 @media (max-width: 1024px) {
   .site-header h1 {
     font-size: 1.4rem;
-  }
-
-  .about-btn {
-    position: static;
-    transform: none;
-    margin-top: 0.75rem;
-    display: inline-block;
   }
 
   .split-screen {
