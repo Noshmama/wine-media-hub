@@ -36,14 +36,28 @@ const PodcastPanel = {
 
     this.grid.innerHTML = filtered.map((podcast, idx) => this.renderCard(podcast, idx)).join('');
 
-    // Attach toggle listeners
+    // Attach toggle listeners for episode lists
     this.grid.querySelectorAll('.episodes-toggle').forEach(btn => {
       btn.addEventListener('click', () => {
         const list = btn.nextElementSibling;
         const isOpen = list.classList.toggle('open');
         btn.textContent = isOpen
-          ? `Hide episodes`
+          ? 'Hide episodes'
           : `Show ${list.children.length} recent episodes`;
+      });
+    });
+
+    // Clicking podcast name or artwork also toggles episodes
+    this.grid.querySelectorAll('.podcast-card').forEach(card => {
+      const toggle = card.querySelector('.episodes-toggle');
+      if (!toggle) return;
+
+      card.querySelectorAll('.artwork, .podcast-name-link').forEach(el => {
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          toggle.click();
+        });
       });
     });
   },
@@ -53,7 +67,6 @@ const PodcastPanel = {
     const author = App.escapeHtml(podcast.author);
     const artwork = App.escapeHtml(podcast.artwork || '');
     const description = App.escapeHtml(podcast.description || '');
-    const iTunesUrl = App.escapeHtml(podcast.iTunesUrl || '#');
 
     const badges = podcast.categories
       .map(c => `<span class="category-badge">${App.escapeHtml(c)}</span>`)
@@ -89,7 +102,7 @@ const PodcastPanel = {
           <img class="artwork" src="${artwork}" alt="${name}" loading="lazy">
           <div class="podcast-info">
             <div class="podcast-name">
-              <a href="${iTunesUrl}" target="_blank" rel="noopener noreferrer">${name}</a>
+              <a href="#" class="podcast-name-link">${name}</a>
             </div>
             <div class="podcast-author">${author}</div>
             <div class="podcast-description">${description}</div>
