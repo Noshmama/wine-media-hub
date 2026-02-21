@@ -537,12 +537,13 @@ body {
 
   .video-card a {
     flex-shrink: unset;
+    width: 100%;
   }
 
   .video-card .thumbnail {
     width: 100%;
-    height: auto;
-    max-height: 200px;
+    height: auto !important;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
   }
 }
