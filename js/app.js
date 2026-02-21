@@ -49,6 +49,29 @@ const App = {
    */
   renderError(container, message) {
     container.innerHTML = `<div class="error-message">${App.escapeHtml(message)}</div>`;
+  },
+
+  /** Shared IntersectionObserver — loads images when they scroll into view */
+  imageObserver: null,
+  initImageObserver() {
+    if (this.imageObserver) return;
+    this.imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+          this.imageObserver.unobserve(img);
+        }
+      });
+    }, { rootMargin: '200px' });
+  },
+
+  /** Observe a single image element for lazy loading */
+  observeImage(img) {
+    if (this.imageObserver) {
+      this.imageObserver.observe(img);
+    }
   }
 };
 

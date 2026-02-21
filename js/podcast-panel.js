@@ -1,18 +1,40 @@
 /**
  * Wine Media Hub — Podcast Panel
- * Renders all cards once, then filters by toggling CSS visibility.
+ * Features: one-time DOM build, CSS show/hide filtering,
+ * text search, lazy image loading, paginated "Show more".
  */
 
 const PodcastPanel = {
   podcasts: [],
   grid: null,
   categorySelect: null,
+  searchInput: null,
+  allCards: [],
+  PAGE_SIZE: 30,
+  visibleLimit: 30,
+  showMoreBtn: null,
 
   async init() {
     this.grid = document.getElementById('podcast-grid');
     this.categorySelect = document.getElementById('podcast-category');
+    this.searchInput = document.getElementById('podcast-search');
 
-    this.categorySelect.addEventListener('change', () => this.filterCards());
+    App.initImageObserver();
+
+    // Reset pagination when filters change
+    this.categorySelect.addEventListener('change', () => {
+      this.visibleLimit = this.PAGE_SIZE;
+      this.applyFilters();
+    });
+
+    let searchTimer;
+    this.searchInput.addEventListener('input', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        this.visibleLimit = this.PAGE_SIZE;
+        this.applyFilters();
+      }, 200);
+    });
 
     const data = await App.fetchData('data/podcasts.json');
     if (!data || !data.podcasts) {
@@ -22,9 +44,9 @@ const PodcastPanel = {
 
     this.podcasts = data.podcasts;
     this.buildCards();
+    this.applyFilters();
   },
 
-  /** Build all cards once and attach event listeners */
   buildCards() {
     if (this.podcasts.length === 0) {
       this.grid.innerHTML = '<div class="loading">No podcasts found.</div>';
@@ -37,6 +59,7 @@ const PodcastPanel = {
       const card = document.createElement('div');
       card.className = 'podcast-card';
       card.dataset.categories = podcast.categories.join('|');
+      card.dataset.searchtext = (podcast.name + ' ' + podcast.author).toLowerCase();
 
       const name = App.escapeHtml(podcast.name);
       const author = App.escapeHtml(podcast.author);
@@ -73,7 +96,7 @@ const PodcastPanel = {
 
       card.innerHTML = `
         <div class="podcast-top">
-          <img class="artwork" src="${artwork}" alt="${name}" loading="lazy">
+          <img class="artwork" data-src="${artwork}" alt="${name}">
           <div class="podcast-info">
             <div class="podcast-name">
               <a href="#" class="podcast-name-link">${name}</a>
@@ -98,7 +121,6 @@ const PodcastPanel = {
             : `Show ${list.children.length} recent episodes`;
         });
 
-        // Clicking artwork or name also toggles episodes
         card.querySelectorAll('.artwork, .podcast-name-link').forEach(el => {
           el.style.cursor = 'pointer';
           el.addEventListener('click', (e) => {
@@ -108,34 +130,66 @@ const PodcastPanel = {
         });
       }
 
+      this.allCards.push(card);
       fragment.appendChild(card);
+    });
+
+    // "Show more" button
+    this.showMoreBtn = document.createElement('button');
+    this.showMoreBtn.className = 'show-more-btn';
+    this.showMoreBtn.addEventListener('click', () => {
+      this.visibleLimit += this.PAGE_SIZE;
+      this.applyFilters();
     });
 
     this.grid.innerHTML = '';
     this.grid.appendChild(fragment);
+    this.grid.appendChild(this.showMoreBtn);
   },
 
-  /** Show/hide cards based on selected category — no DOM rebuild */
-  filterCards() {
+  applyFilters() {
     const category = this.categorySelect.value;
-    const cards = this.grid.children;
+    const query = this.searchInput.value.toLowerCase().trim();
 
-    let visibleCount = 0;
-    for (let i = 0; i < cards.length; i++) {
-      const card = cards[i];
-      if (!card.dataset.categories) continue;
-      const show = category === 'All' || card.dataset.categories.split('|').includes(category);
-      card.style.display = show ? '' : 'none';
-      if (show) visibleCount++;
+    let matchCount = 0;
+    let shownCount = 0;
+
+    for (let i = 0; i < this.allCards.length; i++) {
+      const card = this.allCards[i];
+      const matchesCategory = category === 'All' || card.dataset.categories.split('|').includes(category);
+      const matchesSearch = !query || card.dataset.searchtext.includes(query);
+
+      if (matchesCategory && matchesSearch) {
+        matchCount++;
+        if (matchCount <= this.visibleLimit) {
+          card.style.display = '';
+          shownCount++;
+          const img = card.querySelector('img[data-src]');
+          if (img) App.observeImage(img);
+        } else {
+          card.style.display = 'none';
+        }
+      } else {
+        card.style.display = 'none';
+      }
     }
 
-    // Handle empty state
+    // Show/hide "Show more" button
+    const remaining = matchCount - shownCount;
+    if (remaining > 0) {
+      this.showMoreBtn.textContent = `Show more podcasts (${remaining} remaining)`;
+      this.showMoreBtn.style.display = '';
+    } else {
+      this.showMoreBtn.style.display = 'none';
+    }
+
+    // Empty state
     let emptyMsg = this.grid.querySelector('.empty-message');
-    if (visibleCount === 0) {
+    if (matchCount === 0) {
       if (!emptyMsg) {
         emptyMsg = document.createElement('div');
         emptyMsg.className = 'loading empty-message';
-        emptyMsg.textContent = 'No podcasts found for this category.';
+        emptyMsg.textContent = 'No podcasts found.';
         this.grid.appendChild(emptyMsg);
       }
       emptyMsg.style.display = '';
