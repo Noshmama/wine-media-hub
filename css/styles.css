@@ -120,6 +120,17 @@ body {
   color: var(--white);
 }
 
+.analyses-line1,
+.analyses-line2 {
+  display: block;
+}
+
+.analyses-highlight {
+  color: var(--white);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
 /* ===== Modal ===== */
 .modal-overlay {
   display: none;
