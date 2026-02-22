@@ -99,7 +99,7 @@ body {
 /* ===== Analyses Button ===== */
 .analyses-btn {
   position: absolute;
-  right: 1.5rem;
+  right: 0.5rem;
   top: 50%;
   transform: translateY(-50%);
   padding: 0.5rem 1rem;
