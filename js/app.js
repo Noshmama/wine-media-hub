@@ -90,4 +90,15 @@ document.addEventListener('DOMContentLoaded', () => {
   modal.addEventListener('click', (e) => {
     if (e.target === modal) modal.classList.remove('open');
   });
+
+  // Industry Analyses modal
+  const analysesModal = document.getElementById('analyses-modal');
+  const analysesBtn = document.getElementById('analyses-btn');
+  const analysesClose = document.getElementById('analyses-modal-close');
+
+  analysesBtn.addEventListener('click', () => analysesModal.classList.add('open'));
+  analysesClose.addEventListener('click', () => analysesModal.classList.remove('open'));
+  analysesModal.addEventListener('click', (e) => {
+    if (e.target === analysesModal) analysesModal.classList.remove('open');
+  });
 });
