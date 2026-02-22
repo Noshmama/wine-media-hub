@@ -230,6 +230,23 @@ body {
   }
 }
 
+/* ===== Contact Link ===== */
+.contact-link {
+  display: inline-block;
+  color: var(--burgundy);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  border-bottom: 1px solid var(--gold);
+  padding-bottom: 1px;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.contact-link:hover {
+  color: var(--burgundy-dark);
+  border-color: var(--burgundy);
+}
+
 /* ===== Video Player Modal ===== */
 .video-modal {
   max-width: 900px;
