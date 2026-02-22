@@ -99,24 +99,25 @@ body {
 /* ===== Analyses Button ===== */
 .analyses-btn {
   position: absolute;
-  right: 0.5rem;
+  right: 3rem;
   top: 50%;
   transform: translateY(-50%);
-  padding: 0.5rem 1rem;
-  background: var(--gold);
-  color: var(--burgundy-dark);
+  max-width: 260px;
+  padding: 0;
+  background: none;
   border: none;
-  border-radius: var(--radius);
+  color: var(--gold-light);
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 400;
   cursor: pointer;
   font-family: inherit;
-  letter-spacing: 0.03em;
-  transition: background var(--transition);
+  line-height: 1.5;
+  text-align: right;
+  transition: color var(--transition);
 }
 
 .analyses-btn:hover {
-  background: var(--gold-light);
+  color: var(--white);
 }
 
 /* ===== Modal ===== */
