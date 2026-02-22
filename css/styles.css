@@ -124,6 +124,14 @@ body {
   text-decoration: underline;
 }
 
+.analyses-mobile {
+  display: none;
+}
+
+.analyses-desktop {
+  display: inline;
+}
+
 /* ===== Modal ===== */
 .modal-overlay {
   display: none;
@@ -795,11 +803,18 @@ img[data-src] {
     margin: 0.5rem auto 0;
     max-width: none;
     text-align: center;
-    background: var(--gold);
-    color: var(--burgundy-dark);
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius);
-    font-weight: 600;
+    background: none;
+    color: var(--gold-light);
+    padding: 0;
+    font-weight: 400;
+  }
+
+  .analyses-desktop {
+    display: none;
+  }
+
+  .analyses-mobile {
+    display: inline;
   }
 
   .split-screen {
