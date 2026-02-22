@@ -25,7 +25,18 @@
           <p class="modal-subtitle">Wine &amp; Spirits Professional | AI Implementation Specialist</p>
           <p>With over two decades of experience in the wine and spirits trade, I have built a career at the intersection of industry expertise and innovation. From vineyard to glass, I understand the business of wine — the markets, the people, and the trends that shape this dynamic industry.</p>
           <p>Wine Media Hub is my curated collection of the best wine content on the web, bringing together videos and podcasts across every facet of the wine world — from business and trade to tasting, winemaking, and emerging regions.</p>
-          <p><button type="button" class="contact-link" id="contact-btn">Get in touch</button></p>
+          <div class="contact-section">
+            <button type="button" class="contact-link" id="contact-toggle">Get in touch</button>
+            <form class="contact-form" id="contact-form" style="display:none" method="POST">
+              <input type="hidden" name="_captcha" value="false">
+              <input type="hidden" name="_subject" value="Wine Media Hub — New Message">
+              <input type="text" name="name" placeholder="Your name" required>
+              <input type="email" name="email" placeholder="Your email" required>
+              <textarea name="message" placeholder="Your message" rows="4" required></textarea>
+              <button type="submit" class="contact-submit">Send Message</button>
+              <p class="contact-status" id="contact-status"></p>
+            </form>
+          </div>
         </div>
       </div>
     </div>

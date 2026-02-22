@@ -91,9 +91,46 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target === modal) modal.classList.remove('open');
   });
 
-  // Contact button
-  document.getElementById('contact-btn').addEventListener('click', () => {
-    window.location.href = 'mai' + 'lto:nosh' + 'mama@ya' + 'hoo.com';
+  // Contact form toggle and submission
+  const contactToggle = document.getElementById('contact-toggle');
+  const contactForm = document.getElementById('contact-form');
+  const contactStatus = document.getElementById('contact-status');
+
+  contactToggle.addEventListener('click', () => {
+    const showing = contactForm.style.display === 'none';
+    contactForm.style.display = showing ? 'block' : 'none';
+    contactToggle.textContent = showing ? 'Hide contact form' : 'Get in touch';
+  });
+
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = contactForm.querySelector('.contact-submit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+    contactStatus.textContent = '';
+
+    const addr = ['nosh', 'mama', '@', 'ya', 'hoo', '.com'].join('');
+    const formData = new FormData(contactForm);
+
+    try {
+      const resp = await fetch('https://formsubmit.co/ajax/' + addr, {
+        method: 'POST',
+        body: formData
+      });
+      if (resp.ok) {
+        contactStatus.textContent = 'Message sent! Thank you.';
+        contactStatus.style.color = '#2e7d32';
+        contactForm.reset();
+      } else {
+        throw new Error('Send failed');
+      }
+    } catch {
+      contactStatus.textContent = 'Could not send. Please try again.';
+      contactStatus.style.color = '#c62828';
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Send Message';
   });
 
   // Industry Analyses modal
