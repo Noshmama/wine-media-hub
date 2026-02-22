@@ -700,6 +700,13 @@ img[data-src] {
     transform: none;
     display: block;
     margin: 0.5rem auto 0;
+    max-width: none;
+    text-align: center;
+    background: var(--gold);
+    color: var(--burgundy-dark);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    font-weight: 600;
   }
 
   .split-screen {
