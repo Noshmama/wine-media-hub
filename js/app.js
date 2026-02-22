@@ -91,6 +91,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target === modal) modal.classList.remove('open');
   });
 
+  // Contact button
+  document.getElementById('contact-btn').addEventListener('click', () => {
+    window.location.href = 'mai' + 'lto:nosh' + 'mama@ya' + 'hoo.com';
+  });
+
   // Industry Analyses modal
   const analysesModal = document.getElementById('analyses-modal');
   const analysesBtn = document.getElementById('analyses-btn');
