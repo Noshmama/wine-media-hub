@@ -317,57 +317,6 @@
       "episodes": []
     },
     {
-      "name": "Corkbuzz Wine Talk",
-      "author": "Master Sommelier, Laura Maniec",
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Features/v4/5f/88/96/5f8896e9-9be5-529a-af14-cc807367568a/mza_1382744875394257421.png/600x600bb.jpg",
-      "description": "",
-      "categories": [
-        "Connoisseur & Tasting"
-      ],
-      "episodes": [
-        {
-          "title": "Fortified Wine",
-          "pubDate": "Sat, 15 Dec 2012 17:46:01 -0600",
-          "duration": "596",
-          "audioUrl": "https://mcdn.podbean.com/mf/web/iic7mg/FortifiedWine.m4a"
-        },
-        {
-          "title": "Sparkling Wine",
-          "pubDate": "Sat, 15 Dec 2012 17:38:36 -0600",
-          "duration": "610",
-          "audioUrl": "https://mcdn.podbean.com/mf/web/6mjj42/SparklingWine.m4a"
-        },
-        {
-          "title": "Wine Etiquette",
-          "pubDate": "Sat, 15 Dec 2012 17:27:20 -0600",
-          "duration": "596",
-          "audioUrl": "https://mcdn.podbean.com/mf/web/senr7q/WineEtiquette.m4a"
-        },
-        {
-          "title": "Holiday Food & Wine Pairings",
-          "pubDate": "Thu, 13 Dec 2012 22:28:13 -0600",
-          "duration": "983",
-          "audioUrl": "https://mcdn.podbean.com/mf/web/kcyrs/HolidayFoodandWinePairing.m4a"
-        },
-        {
-          "title": "Wine 101",
-          "pubDate": "Sat, 24 Nov 2012 10:31:04 -0600",
-          "duration": "8",
-          "audioUrl": "https://mcdn.podbean.com/mf/web/8a4ajs/Wine101_2-AACforAudioPodcasting.m4a"
-        }
-      ]
-    },
-    {
-      "name": "Creepy Ghost Stories - Tales From The Grave",
-      "author": "Brett Schumacher",
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts126/v4/67/1b/3b/671b3bd8-f19a-cfb5-056c-b33ecf50f9ed/mza_16442102918390822057.jpg/600x600bb.jpg",
-      "description": "",
-      "categories": [
-        "Wineries"
-      ],
-      "episodes": []
-    },
-    {
       "name": "Decanted Wine Podcast",
       "author": "Dave Adams and Sandra Everingham,  WSET level 2 graduates",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts125/v4/ce/05/e0/ce05e037-710b-08b4-2c39-b00c9acb1533/mza_2460346904397430235.jpg/600x600bb.jpg",

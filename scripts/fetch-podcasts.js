@@ -68,6 +68,11 @@ const NAME_BLOCKLIST = [
   /28 da(ys|tes) later/i,
   /movie/i,
   /film review/i,
+  /corkbuzz/i,
+  /ghost stor/i,
+  /creepy/i,
+  /true crime/i,
+  /horror/i,
 ];
 
 function isPodcastBlocked(name) {
