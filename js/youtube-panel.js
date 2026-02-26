@@ -58,7 +58,8 @@ const YouTubePanel = {
       return;
     }
 
-    this.videos = data.videos;
+    // Sort videos newest-first by publish date
+    this.videos = data.videos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
     this.buildCards();
     this.applyFilters();
   },

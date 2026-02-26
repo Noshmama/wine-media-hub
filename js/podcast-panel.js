@@ -42,7 +42,12 @@ const PodcastPanel = {
       return;
     }
 
-    this.podcasts = data.podcasts;
+    // Sort podcasts newest-first by most recent episode date
+    this.podcasts = data.podcasts.sort((a, b) => {
+      const aDate = a.episodes && a.episodes.length > 0 ? new Date(a.episodes[0].pubDate || 0) : new Date(0);
+      const bDate = b.episodes && b.episodes.length > 0 ? new Date(b.episodes[0].pubDate || 0) : new Date(0);
+      return bDate - aDate;
+    });
     this.buildCards();
     this.applyFilters();
   },
