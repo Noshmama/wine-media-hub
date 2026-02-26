@@ -1,48 +1,7 @@
 {
   "lastUpdated": "2026-02-26T01:26:05.617Z",
-  "totalPodcasts": 215,
+  "totalPodcasts": 214,
   "podcasts": [
-    {
-      "name": "28 Dates Later",
-      "author": "iHeartPodcasts",
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts221/v4/56/17/c8/5617c800-ff65-ed2a-dfab-223b2148226f/mza_5292697220233706234.jpg/600x600bb.jpg",
-      "description": "",
-      "categories": [
-        "Connoisseur & Tasting"
-      ],
-      "episodes": [
-        {
-          "title": "Ep 28: The Songwriter",
-          "pubDate": "Wed, 07 Feb 2024 05:00:00 +0000",
-          "duration": "1327",
-          "audioUrl": "https://podtrac.com/pts/redirect.mp3/traffic.omny.fm/d/clips/e73c998e-6e60-432f-8610-ae210140c5b1/4334c474-3da2-4963-9fe9-b08f00ec348b/cdde1231-7b19-4d40-9395-b10d00b5381a/audio.mp3?utm_source=Podcast&in_playlist=e82453c0-899e-4537-b6b1-b08f00ece284"
-        },
-        {
-          "title": "Ep 27: The Guy Who’s Always High",
-          "pubDate": "Mon, 05 Feb 2024 05:00:00 +0000",
-          "duration": "1209",
-          "audioUrl": "https://podtrac.com/pts/redirect.mp3/traffic.omny.fm/d/clips/e73c998e-6e60-432f-8610-ae210140c5b1/4334c474-3da2-4963-9fe9-b08f00ec348b/34bc5e7e-6253-4780-8680-b0fa00cebd5e/audio.mp3?utm_source=Podcast&in_playlist=e82453c0-899e-4537-b6b1-b08f00ece284"
-        },
-        {
-          "title": "Ep 26: The YouTuber",
-          "pubDate": "Wed, 31 Jan 2024 05:00:00 +0000",
-          "duration": "1280",
-          "audioUrl": "https://podtrac.com/pts/redirect.mp3/traffic.omny.fm/d/clips/e73c998e-6e60-432f-8610-ae210140c5b1/4334c474-3da2-4963-9fe9-b08f00ec348b/56e3f2fb-aea5-45f3-884e-b0fa00c04813/audio.mp3?utm_source=Podcast&in_playlist=e82453c0-899e-4537-b6b1-b08f00ece284"
-        },
-        {
-          "title": "Ep 25: The Girl Who’s Moving Away",
-          "pubDate": "Mon, 29 Jan 2024 05:00:00 +0000",
-          "duration": "1210",
-          "audioUrl": "https://podtrac.com/pts/redirect.mp3/traffic.omny.fm/d/clips/e73c998e-6e60-432f-8610-ae210140c5b1/4334c474-3da2-4963-9fe9-b08f00ec348b/b12bf3b5-86f3-4e6b-a6cc-b0f301270ab5/audio.mp3?utm_source=Podcast&in_playlist=e82453c0-899e-4537-b6b1-b08f00ece284"
-        },
-        {
-          "title": "Ep 24: The Fan",
-          "pubDate": "Wed, 24 Jan 2024 05:00:00 +0000",
-          "duration": "981",
-          "audioUrl": "https://podtrac.com/pts/redirect.mp3/traffic.omny.fm/d/clips/e73c998e-6e60-432f-8610-ae210140c5b1/4334c474-3da2-4963-9fe9-b08f00ec348b/ab3ecca5-6972-45ea-ac53-b0f30126b75c/audio.mp3?utm_source=Podcast&in_playlist=e82453c0-899e-4537-b6b1-b08f00ece284"
-        }
-      ]
-    },
     {
       "name": "365WineTrade Techology Talks",
       "author": "365WineTrade by Western Computer",

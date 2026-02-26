@@ -65,7 +65,7 @@ const MAX_EPISODES_PER_PODCAST = 5;
 
 // Blocklist: podcast names that aren't about wine
 const NAME_BLOCKLIST = [
-  /28 days later/i,
+  /28 da(ys|tes) later/i,
   /movie/i,
   /film review/i,
 ];
