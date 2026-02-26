@@ -2,7 +2,9 @@ const RSSParser = require('rss-parser');
 const fs = require('fs');
 const path = require('path');
 
-const rssParser = new RSSParser();
+const rssParser = new RSSParser({
+  timeout: 10000, // 10-second timeout per feed
+});
 
 const CATEGORIES = {
   'Business & Trade': [
@@ -71,9 +73,24 @@ async function searchITunes(query) {
   return data.results || [];
 }
 
+async function fetchWithTimeout(promise, ms) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`Timed out after ${ms}ms`)), ms);
+  });
+  try {
+    const result = await Promise.race([promise, timeout]);
+    clearTimeout(timer);
+    return result;
+  } catch (err) {
+    clearTimeout(timer);
+    throw err;
+  }
+}
+
 async function fetchRSSEpisodes(feedUrl) {
   try {
-    const feed = await rssParser.parseURL(feedUrl);
+    const feed = await fetchWithTimeout(rssParser.parseURL(feedUrl), 15000);
     const episodes = (feed.items || []).slice(0, MAX_EPISODES_PER_PODCAST).map(item => ({
       title: item.title || 'Untitled Episode',
       pubDate: item.pubDate || item.isoDate || null,
@@ -137,22 +154,33 @@ async function fetchAllPodcasts() {
   return allPodcasts;
 }
 
+const MAX_PODCASTS_TO_ENRICH = 100;
+
 async function enrichWithEpisodes(podcastsMap) {
   const podcasts = Array.from(podcastsMap.values());
-  console.log(`\nFetching episodes for ${podcasts.length} podcasts...`);
+  const toEnrich = podcasts.filter(p => p.feedUrl).slice(0, MAX_PODCASTS_TO_ENRICH);
+  console.log(`\nFetching episodes for ${toEnrich.length} of ${podcasts.length} podcasts (cap: ${MAX_PODCASTS_TO_ENRICH})...`);
 
-  for (const podcast of podcasts) {
-    if (!podcast.feedUrl) {
-      console.log(`  Skipping "${podcast.name}" (no feed URL)`);
-      continue;
-    }
+  let succeeded = 0;
+  let failed = 0;
 
+  for (const podcast of toEnrich) {
     console.log(`  Fetching episodes: "${podcast.name}"`);
     podcast.episodes = await fetchRSSEpisodes(podcast.feedUrl);
-    // Be respectful to RSS hosts
+    if (podcast.episodes.length > 0) {
+      succeeded++;
+    } else {
+      failed++;
+    }
     await sleep(300);
   }
 
+  // Podcasts beyond the cap get empty episodes
+  for (const podcast of podcasts) {
+    if (!podcast.episodes) podcast.episodes = [];
+  }
+
+  console.log(`\n  Episode fetch complete: ${succeeded} succeeded, ${failed} failed/empty`);
   return podcasts;
 }
 
