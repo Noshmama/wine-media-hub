@@ -63,6 +63,20 @@ const CATEGORIES = {
 const MAX_RESULTS_PER_QUERY = 10;
 const MAX_EPISODES_PER_PODCAST = 5;
 
+// Blocklist: podcast names that aren't about wine
+const NAME_BLOCKLIST = [
+  /28 days later/i,
+  /movie/i,
+  /film review/i,
+];
+
+function isPodcastBlocked(name) {
+  for (const pattern of NAME_BLOCKLIST) {
+    if (pattern.test(name)) return true;
+  }
+  return false;
+}
+
 async function searchITunes(query) {
   const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=podcast&limit=${MAX_RESULTS_PER_QUERY}`;
   const response = await fetch(url);
@@ -122,6 +136,12 @@ async function fetchAllPodcasts() {
         for (const result of results) {
           const podcastId = result.collectionId;
           if (!podcastId) continue;
+
+          const podcastName = result.collectionName || result.trackName || '';
+          if (isPodcastBlocked(podcastName)) {
+            console.log(`    Blocked: "${podcastName}"`);
+            continue;
+          }
 
           if (allPodcasts.has(podcastId)) {
             const existing = allPodcasts.get(podcastId);

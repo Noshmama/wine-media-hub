@@ -84,6 +84,28 @@ const CATEGORIES = {
 
 const MAX_RESULTS_PER_QUERY = 10;
 
+// Blocklist: titles or channels that aren't about wine
+const TITLE_BLOCKLIST = [
+  /28 days later/i,
+  /movie\s*(review|trailer|clip|scene)/i,
+  /official\s*trailer/i,
+  /film\s*review/i,
+];
+
+const CHANNEL_BLOCKLIST = [
+  // Add non-wine channels that keep appearing
+];
+
+function isBlocked(title, channel) {
+  for (const pattern of TITLE_BLOCKLIST) {
+    if (pattern.test(title)) return true;
+  }
+  for (const pattern of CHANNEL_BLOCKLIST) {
+    if (pattern.test(channel)) return true;
+  }
+  return false;
+}
+
 async function searchVideos(query) {
   const response = await youtube.search.list({
     part: 'snippet',
@@ -110,8 +132,15 @@ async function fetchAllVideos() {
 
         for (const item of items) {
           const videoId = item.id.videoId;
+          const title = item.snippet.title;
+          const channel = item.snippet.channelTitle;
+
+          if (isBlocked(title, channel)) {
+            console.log(`    Blocked: "${title}" (${channel})`);
+            continue;
+          }
+
           if (allVideos.has(videoId)) {
-            // Add category to existing video if not already present
             const existing = allVideos.get(videoId);
             if (!existing.categories.includes(category)) {
               existing.categories.push(category);
@@ -121,8 +150,8 @@ async function fetchAllVideos() {
 
           allVideos.set(videoId, {
             videoId,
-            title: item.snippet.title,
-            channel: item.snippet.channelTitle,
+            title,
+            channel,
             thumbnail: item.snippet.thumbnails.medium?.url || item.snippet.thumbnails.default?.url,
             publishedAt: item.snippet.publishedAt,
             categories: [category]
