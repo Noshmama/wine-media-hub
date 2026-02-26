@@ -96,7 +96,7 @@ const PodcastPanel = {
 
       card.innerHTML = `
         <div class="podcast-top">
-          <img class="artwork" data-src="${artwork}" alt="${name}">
+          <img class="artwork" data-src="${artwork}" alt="${name}" onerror="this.closest('.podcast-card').style.display='none'">
           <div class="podcast-info">
             <div class="podcast-name">
               <a href="#" class="podcast-name-link">${name}</a>
