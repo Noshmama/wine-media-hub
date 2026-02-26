@@ -124,6 +124,7 @@ function sleep(ms) {
 
 async function fetchAllPodcasts() {
   const allPodcasts = new Map(); // keyed by collectionId for deduplication
+  const seenNames = new Set(); // deduplicate by name too
 
   for (const [category, queries] of Object.entries(CATEGORIES)) {
     console.log(`\nFetching category: ${category}`);
@@ -143,6 +144,12 @@ async function fetchAllPodcasts() {
             continue;
           }
 
+          const nameLower = podcastName.toLowerCase().trim();
+          if (seenNames.has(nameLower)) {
+            console.log(`    Skipping duplicate name: "${podcastName}"`);
+            continue;
+          }
+
           if (allPodcasts.has(podcastId)) {
             const existing = allPodcasts.get(podcastId);
             if (!existing.categories.includes(category)) {
@@ -151,6 +158,7 @@ async function fetchAllPodcasts() {
             continue;
           }
 
+          seenNames.add(nameLower);
           allPodcasts.set(podcastId, {
             name: result.collectionName || result.trackName || 'Unknown Podcast',
             author: result.artistName || 'Unknown',
